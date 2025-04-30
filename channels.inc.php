@@ -68,6 +68,14 @@ add_channel($chan_cz, "Prima Cool", "PrimaCool", "https://iprima.cz");
 add_channel($chan_cz, "Prima Zoom", "PrimaZoom", "https://iprima.cz");
 add_channel($chan_cz, "Prima Love", "PrimaLove", "https://iprima.cz");
 add_channel($chan_cz, "Prima Max", "PrimaMax", "https://iprima.cz");
+add_channel($chan_cz, "Prima Krimi", "PrimaKrimi", "https://iprima.cz");
+add_channel($chan_cz, "Prima Star", "PrimaStar", "https://iprima.cz");
+add_channel($chan_cz, "Prima Show", "PrimaShow", "https://iprima.cz");
+//Channel announced launch on 2025
+//add_channel($chan_cz, "Prima Case", "PrimaCase", "https://iprima.cz");
+//Channel announced launch on 2025/2026
+//add_channel($chan_cz, "Prima Port", "PrimaPort", "https://iprima.cz");
+add_channel($chan_cz, "CNN Prima News", "PrimaNews", "https://cnn.iprima.cz/vysilani");
 
 $czechNote = array(
     "    <br>",
