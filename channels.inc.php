@@ -22,13 +22,14 @@ add_channel($chan_sk, "TA3", "TA3", "https://www.ta3.com/live");
 add_channel($chan_sk, "Markiza", "Markiza", "https://media.cms.markiza.sk/embed/markiza-live?autoplay=any");
 add_channel($chan_sk, "(Markiza) Dajto", "Dajto", "https://media.cms.markiza.sk/embed/dajto-live?autoplay=any");
 add_channel($chan_sk, "(Markiza) Doma", "Doma", "https://media.cms.markiza.sk/embed/doma-live?autoplay=any");
-add_channel($chan_sk, "(Markiza) Krimi", "Krimi", "https://media.cms.markiza.sk/embed/krimi-live?autoplay=any");
-add_channel($chan_sk, "(Markiza) Klasik", "Klasik", "https://media.cms.markiza.sk/embed/klasik-live?autoplay=any");
+add_channel($chan_sk, "Markiza Krimi", "Krimi", "https://media.cms.markiza.sk/embed/krimi-live?autoplay=any");
+add_channel($chan_sk, "Markiza Klasik", "Klasik", "https://media.cms.markiza.sk/embed/klasik-live?autoplay=any");
 add_channel($chan_sk, "JOJ", "JOJ", "https://live.joj.sk/");
 add_channel($chan_sk, "JOJ Plus", "JOJP", "https://plus.joj.sk/live");
-add_channel($chan_sk, "JOJ Wau", "Wau", "https://wau.joj.sk/live");
+add_channel($chan_sk, "(JOJ) Wau", "Wau", "https://wau.joj.sk/live");
 add_channel($chan_sk, "JOJ 24", "JOJ24", "https://joj24.noviny.sk/");
-
+add_channel($chan_sk, "JOJ Šport", "JOJSport", "https://jojsport.joj.sk");
+add_channel($chan_sk, "Jojko", "Jojko", "https://jojko.joj.sk");
 
 $slovakiaNote = array (
     "    <br>",
@@ -71,6 +72,11 @@ add_channel($chan_cz, "Prima Max", "PrimaMax", "https://iprima.cz");
 add_channel($chan_cz, "Prima Krimi", "PrimaKrimi", "https://iprima.cz");
 add_channel($chan_cz, "Prima Star", "PrimaStar", "https://iprima.cz");
 add_channel($chan_cz, "Prima Show", "PrimaShow", "https://iprima.cz");
+add_channel($chan_cz, "JOJ Family", "JOJFamily", "https://jojfamily.joj.cz");
+add_channel($chan_cz, "JOJ Cinema", "JOJCinema", "https://jojcinema.cz/");
+add_channel($chan_cz, "CS Film", "CSFilm", "https://csfilm.joj.cz");
+add_channel($chan_cz, "CS History", "CSHistory", "https://cshistory.joj.cz");
+add_channel($chan_cz, "CS Mystery", "CSMystery", "https://csmystery.joj.cz");
 //Channel announced launch on 2025
 //add_channel($chan_cz, "Prima Case", "PrimaCase", "https://iprima.cz");
 //Channel announced launch on 2025/2026

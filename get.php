@@ -172,6 +172,27 @@ else if ($channel == "Wau") {
 else if ($channel == "JOJ24") {
     m3u8_refer("https://live.cdn.joj.sk/live/andromeda/joj_news-1080.m3u8", "https://media.joj.sk/");
 }
+else if ($channel == "JOJFamily") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/family-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "JOJCinema") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/cinema-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "JOJSport") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/joj_sport-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "Jojko") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/jojko-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "CSFilm") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/cs_film-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "CSHistory") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/cs_history-1080.m3u8", "https://media.joj.sk/");
+}
+else if ($channel == "CSMystery") {
+    m3u8_refer("https://live.cdn.joj.sk/live/andromeda/cs_mystery-1080.m3u8", "https://media.joj.sk/");
+}
 else if ($channel == "Nova") {
     m3u8_refer(nova_url("nova-"), "https://media.cms.nova.cz/");
 }
