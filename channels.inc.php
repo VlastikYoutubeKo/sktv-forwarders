@@ -26,7 +26,7 @@ add_channel($chan_sk, "Markiza Krimi", "Krimi", "https://media.cms.markiza.sk/em
 add_channel($chan_sk, "Markiza Klasik", "Klasik", "https://media.cms.markiza.sk/embed/klasik-live?autoplay=any");
 add_channel($chan_sk, "JOJ", "JOJ", "https://live.joj.sk/");
 add_channel($chan_sk, "JOJ Plus", "JOJP", "https://plus.joj.sk/live");
-add_channel($chan_sk, "JOJ Wau", "Wau", "https://wau.joj.sk/live");
+add_channel($chan_sk, "(JOJ) Wau", "Wau", "https://wau.joj.sk/live");
 add_channel($chan_sk, "JOJ 24", "JOJ24", "https://joj24.noviny.sk/");
 add_channel($chan_sk, "JOJ Šport", "JOJSport", "https://jojsport.joj.sk");
 add_channel($chan_sk, "Jojko", "Jojko", "https://jojko.joj.sk");
