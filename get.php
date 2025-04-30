@@ -237,6 +237,34 @@ else if ($channel == "PrimaMax") {
     if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-p111017")) . "&m3u8-forge=true");
     else loc(prima("id-p111017"));
 }
+else if ($channel == "PrimaKrimi") {
+    if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-p432829")) . "&m3u8-forge=true");
+    else loc(prima("id-p432829"));
+}
+else if ($channel == "PrimaNews") {
+    if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-p650443")) . "&m3u8-forge=true");
+    else loc(prima("id-p650443"));
+}
+else if ($channel == "PrimaStar") {
+    if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-p846043")) . "&m3u8-forge=true");
+    else loc(prima("id-p846043"));
+}
+else if ($channel == "PrimaShow") {
+    if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-p899572")) . "&m3u8-forge=true");
+    else loc(prima("id-p899572"));
+}
+else if ($channel == "PrimaCase") {
+    //Channel announced launch on 2025
+    //if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-pXXXXXX")) . "&m3u8-forge=true");
+    //else loc(prima("id-pXXXXXX"));
+    notfound("video_unavailable/unavailable.m3u8");
+}
+else if ($channel == "PrimaPort") {
+    //Channel announced launch on 2025/2026
+    //if($forge) loc($SKTV_PROXY_CZ . urlencode(prima("id-pXXXXXX")) . "&m3u8-forge=true");
+    //else loc(prima("id-pXXXXXX"));
+    notfound("video_unavailable/unavailable.m3u8");
+}
 else {
     notfound("video_unavailable/unavailable.m3u8");
 }
