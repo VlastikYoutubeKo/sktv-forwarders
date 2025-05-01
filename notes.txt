@@ -1,12 +1,3 @@
-Please make sure to create a temp/ directory alongside these scripts!
+You need to host the proxy scripts and change the URLs in the first few lines of get.php
 
-Created by nezbednik
-2023
-
-Check out my other stuff
-https://home.nezbednik.eu.org:2000/
-https://github.com/NezbednikSK
-https://codeberg.org/nezbednik
-
-favicon.ico is under CC0 - created by me
-Read it here: https://creativecommons.org/publicdomain/zero/1.0/
+Using the infrastructure here for anything else than testing is strictly prohibited. Especially when it comes to various illegal streaming lists.
