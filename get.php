@@ -70,8 +70,8 @@ function stv_url_proxy($x) {
 }
  
 //Markiza with proxy
-function markiza_url_proxy($x) {
-    $siteurl = "https://media.cms.markiza.sk/embed/" . $x . "-live?autoplay=any";
+function markiza_url_proxy($x, $tn = false) {
+    $siteurl = "https://media.cms.markiza.sk/embed/" . $x . ($tn ? "" : "-live") . "?autoplay=any";
     $sitecontent = proxysktv_sk_simple($siteurl);
     $streamurl = join("", explode("\\", explode("\"", explode("[{\"src\":\"", $sitecontent)[1])[0]));
     return $streamurl;
@@ -159,6 +159,9 @@ else if ($channel == "Krimi") {
 }
 else if ($channel == "Klasik") {
     m3u8_refer(markiza_url_proxy("klasik"), "https://media.cms.markiza.sk/");
+}
+else if ($channel == "MarkizaTNLive") {
+    m3u8_refer(markiza_url_proxy("BQeGg0uPHJP", true), "https://media.cms.markiza.sk/");
 }
 else if ($channel == "JOJ") {
     m3u8_refer("https://live.cdn.joj.sk/live/andromeda/joj-1080.m3u8", "https://media.joj.sk/");

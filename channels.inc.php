@@ -24,6 +24,7 @@ add_channel($chan_sk, "(Markiza) Dajto", "Dajto", "https://media.cms.markiza.sk/
 add_channel($chan_sk, "(Markiza) Doma", "Doma", "https://media.cms.markiza.sk/embed/doma-live?autoplay=any");
 add_channel($chan_sk, "Markiza Krimi", "Krimi", "https://media.cms.markiza.sk/embed/krimi-live?autoplay=any");
 add_channel($chan_sk, "Markiza Klasik", "Klasik", "https://media.cms.markiza.sk/embed/klasik-live?autoplay=any");
+add_channel($chan_sk, "TN Live.sk", "MarkizaTNLive", "https://media.cms.markiza.sk/embed/BQeGg0uPHJP?autoplay=any");
 add_channel($chan_sk, "JOJ", "JOJ", "https://live.joj.sk/");
 add_channel($chan_sk, "JOJ Plus", "JOJP", "https://plus.joj.sk/live");
 add_channel($chan_sk, "(JOJ) Wau", "Wau", "https://wau.joj.sk/live");
@@ -63,7 +64,7 @@ add_channel($chan_cz, "Nova Action", "NovaAction", "https://tv.nova.cz/sledujte-
 add_channel($chan_cz, "Nova Fun", "NovaFun", "https://tv.nova.cz/sledujte-zive/4-nova-fun");
 add_channel($chan_cz, "Nova Gold", "NovaGold", "https://tv.nova.cz/sledujte-zive/5-nova-gold");
 add_channel($chan_cz, "Nova Lady", "NovaLady", "https://tv.nova.cz/sledujte-zive/29-nova-lady");
-add_channel($chan_cz, "TN Live", "NovaTNLive", "https://tn.nova.cz/tnlive");
+add_channel($chan_cz, "TN Live.cz", "NovaTNLive", "https://tn.nova.cz/tnlive");
 add_channel($chan_cz, "Prima", "Prima", "https://iprima.cz");
 add_channel($chan_cz, "Prima Cool", "PrimaCool", "https://iprima.cz");
 add_channel($chan_cz, "Prima Zoom", "PrimaZoom", "https://iprima.cz");
