@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (!isset($_GET["x"])) {
     die("Channel not set!");
 }
@@ -9,23 +13,40 @@ $channel = $_GET["x"];
 $sessionId = session_id();
 
 // Zaznamenej viewing
-$db = new SQLite3('viewers.db');
-$db->exec('CREATE TABLE IF NOT EXISTS viewers (
-    channel TEXT,
-    session_id TEXT,
-    last_seen INTEGER,
-    PRIMARY KEY (channel, session_id)
-)');
+try {
+    $db = new SQLite3('viewers.db');
+    $db->exec('CREATE TABLE IF NOT EXISTS viewers (
+        channel TEXT,
+        session_id TEXT,
+        last_seen INTEGER,
+        PRIMARY KEY (channel, session_id)
+    )');
 
-$stmt = $db->prepare('INSERT OR REPLACE INTO viewers (channel, session_id, last_seen) VALUES (:channel, :session_id, :time)');
-$stmt->bindValue(':channel', $channel, SQLITE3_TEXT);
-$stmt->bindValue(':session_id', $sessionId, SQLITE3_TEXT);
-$stmt->bindValue(':time', time(), SQLITE3_INTEGER);
-$stmt->execute();
-$db->close();
+    $stmt = $db->prepare('INSERT OR REPLACE INTO viewers (channel, session_id, last_seen) VALUES (:channel, :session_id, :time)');
+    $stmt->bindValue(':channel', $channel, SQLITE3_TEXT);
+    $stmt->bindValue(':session_id', $sessionId, SQLITE3_TEXT);
+    $stmt->bindValue(':time', time(), SQLITE3_INTEGER);
+    $stmt->execute();
+    $db->close();
+} catch (Exception $e) {
+    error_log("Database error: " . $e->getMessage());
+}
 
 // Získej URL z get_url.php
 include 'get_url.php';
+
+// DEBUG: Vypiš co máme
+if (!isset($streamUrl) || empty($streamUrl)) {
+    header("HTTP/1.1 404 Not Found");
+    echo "Stream not found\n";
+    echo "Channel: " . htmlspecialchars($channel) . "\n";
+    echo "StreamURL isset: " . (isset($streamUrl) ? 'yes' : 'no') . "\n";
+    echo "StreamURL empty: " . (empty($streamUrl) ? 'yes' : 'no') . "\n";
+    if (isset($streamUrl)) {
+        echo "StreamURL value: " . htmlspecialchars($streamUrl) . "\n";
+    }
+    die();
+}
 
 if (isset($streamUrl) && !empty($streamUrl)) {
     // Pokud má kanál referrer, nastav ho
@@ -49,7 +70,7 @@ if (isset($streamUrl) && !empty($streamUrl)) {
         
         if ($m3u8Content === false) {
             header("HTTP/1.1 404 Not Found");
-            die("Stream not available");
+            die("Stream not available - failed to fetch from: " . htmlspecialchars($streamUrl));
         }
         
         // Zpracuj M3U8 a přidej tracking proxy
@@ -88,7 +109,7 @@ if (isset($streamUrl) && !empty($streamUrl)) {
         
         if ($m3u8Content === false) {
             header("HTTP/1.1 404 Not Found");
-            die("Stream not available");
+            die("Stream not available - failed to fetch from: " . htmlspecialchars($streamUrl));
         }
         
         // Zpracuj M3U8 a přidej tracking proxy
@@ -121,5 +142,5 @@ if (isset($streamUrl) && !empty($streamUrl)) {
     }
 } else {
     header("HTTP/1.1 404 Not Found");
-    die("Stream not found");
+    die("Stream not found - no streamUrl returned");
 }
