@@ -13,16 +13,39 @@ if (empty($url)) {
 
 // Aktualizuj last_seen při každém načtení segmentu
 if (!empty($channel)) {
-    $db = new SQLite3('viewers.db');
-    $stmt = $db->prepare('INSERT OR REPLACE INTO viewers (channel, session_id, last_seen) VALUES (:channel, :session_id, :time)');
-    $stmt->bindValue(':channel', $channel, SQLITE3_TEXT);
-    $stmt->bindValue(':session_id', $sessionId, SQLITE3_TEXT);
-    $stmt->bindValue(':time', time(), SQLITE3_INTEGER);
-    $stmt->execute();
-    $db->close();
+    try {
+        $db = new SQLite3('viewers.db');
+        $stmt = $db->prepare('INSERT OR REPLACE INTO viewers (channel, session_id, last_seen) VALUES (:channel, :session_id, :time)');
+        $stmt->bindValue(':channel', $channel, SQLITE3_TEXT);
+        $stmt->bindValue(':session_id', $sessionId, SQLITE3_TEXT);
+        $stmt->bindValue(':time', time(), SQLITE3_INTEGER);
+        $stmt->execute();
+        $db->close();
+    } catch (Exception $e) {
+        error_log("Database error: " . $e->getMessage());
+    }
 }
 
-// Proxy originální segment
+// Funkce pro vytvoření absolutní URL
+function makeAbsoluteUrl($url, $base) {
+    // Už je absolutní
+    if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
+        return $url;
+    }
+    
+    $baseParts = parse_url($base);
+    
+    // Začíná lomítkem - absolutní cesta
+    if ($url[0] == '/') {
+        return $baseParts['scheme'] . '://' . $baseParts['host'] . $url;
+    }
+    
+    // Relativní cesta
+    $path = isset($baseParts['path']) ? dirname($baseParts['path']) : '';
+    return $baseParts['scheme'] . '://' . $baseParts['host'] . $path . '/' . $url;
+}
+
+// Proxy originální segment/playlist
 $url = urldecode($url);
 
 $ch = curl_init($url);
@@ -57,17 +80,69 @@ $body = substr($response, $headerSize);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// Forward status code
-http_response_code($httpCode);
+// Zkontroluj jestli je to M3U8 playlist (nested)
+$isM3u8 = (strpos($body, '#EXTM3U') !== false);
 
-// Forward headers (kromě Transfer-Encoding)
-foreach (explode("\r\n", $headers) as $header) {
-    if ($header && 
-        stripos($header, 'HTTP/') === false && 
-        stripos($header, 'Transfer-Encoding:') === false &&
-        stripos($header, 'Content-Encoding:') === false) {
-        header($header);
+if ($isM3u8) {
+    // Je to další M3U8 playlist - zpracuj ho!
+    header('Content-Type: application/vnd.apple.mpegurl');
+    header('Cache-Control: no-cache');
+    
+    $lines = explode("\n", $body);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        
+        if (empty($line)) {
+            continue;
+        }
+        
+        // Pokud je to URL v tagu (např. #EXT-X-KEY:METHOD=AES-128,URI="...")
+        if (strpos($line, '#') === 0 && strpos($line, 'URI=') !== false) {
+            // Zpracuj URI v tagu
+            $line = preg_replace_callback('/URI="([^"]+)"/', function($matches) use ($url, $channel, $sessionId, $referrer) {
+                $uri = $matches[1];
+                $absoluteUrl = makeAbsoluteUrl($uri, $url);
+                
+                // Proxy přes segment.php
+                $encodedUrl = urlencode($absoluteUrl);
+                $proxyUrl = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
+                if (!empty($referrer)) {
+                    $proxyUrl .= "&ref=" . urlencode($referrer);
+                }
+                return 'URI="' . $proxyUrl . '"';
+            }, $line);
+            echo $line . "\n";
+        }
+        // Pokud je to URL segment (ne komentář)
+        else if (strpos($line, '#') !== 0 && !empty($line)) {
+            // Udělej absolutní URL
+            $absoluteUrl = makeAbsoluteUrl($line, $url);
+            
+            // Proxy URL přes náš tracking
+            $encodedUrl = urlencode($absoluteUrl);
+            $proxyLine = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
+            if (!empty($referrer)) {
+                $proxyLine .= "&ref=" . urlencode($referrer);
+            }
+            echo $proxyLine . "\n";
+        } else {
+            // Komentář nebo tag bez URI
+            echo $line . "\n";
+        }
     }
+} else {
+    // Je to normální segment (video/audio data) - forward headers a tělo
+    http_response_code($httpCode);
+    
+    // Forward headers (kromě Transfer-Encoding)
+    foreach (explode("\r\n", $headers) as $header) {
+        if ($header && 
+            stripos($header, 'HTTP/') === false && 
+            stripos($header, 'Transfer-Encoding:') === false &&
+            stripos($header, 'Content-Encoding:') === false) {
+            header($header);
+        }
+    }
+    
+    echo $body;
 }
-
-echo $body;
