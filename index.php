@@ -101,7 +101,7 @@
             <p class="text-center mt-2 text-sm opacity-75">
                 <i class="fab fa-github mr-1"></i>
                 licensed under AGPL-3.0-or-later, 
-                <a href="https://github.com/santomet/sktv-forwarders" class="underline hover:text-blue-200 transition">source available</a>
+                <a href="https://github.com/vlastikyoutubeko/sktv-forwarders" class="underline hover:text-blue-200 transition">source available</a>
             </p>
         </div>
     </div>
@@ -185,6 +185,34 @@
         <?php
         }
         ?>
+        
+        <!-- Privacy Notice -->
+        <div class="mt-8 pt-6 bg-blue-50 rounded-lg p-6 shadow-md">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                    <i class="fas fa-shield-alt text-blue-600 mr-2"></i>
+                    Privacy & Viewer Statistics
+                </h3>
+                <div class="text-sm text-gray-700 space-y-2">
+                    <p>
+                        <strong>What we track:</strong> We collect minimal data (channel name, session ID, timestamp) 
+                        <strong>only</strong> to display live viewer counts. Your data is automatically deleted after 30 seconds of inactivity.
+                    </p>
+                    <p>
+                        <strong>What we DON'T track:</strong> IP addresses, personal information, viewing history, or any other identifying data.
+                    </p>
+                    <p>
+                        <strong>Opt-out:</strong> Use the "Original URL" links to bypass our proxy and avoid any tracking.
+                    </p>
+                    <div class="mt-3">
+                        <a href="privacy.php" class="text-blue-600 hover:text-blue-800 underline font-medium">
+                            <i class="fas fa-file-alt mr-1"></i>
+                            Read Full Privacy Policy & Terms of Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Footer -->
         <div class="mt-12 pt-8 border-t border-gray-300">
