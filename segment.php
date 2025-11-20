@@ -48,26 +48,35 @@ function makeAbsoluteUrl($url, $base) {
 // Proxy originální segment/playlist
 $url = urldecode($url);
 
+// Ochrana proti rekurzi - max 3 úrovně vnořených M3U8
+$depth = intval($_GET['depth'] ?? 0);
+if ($depth > 3) {
+    header("HTTP/1.1 508 Loop Detected");
+    die("Too many nested playlists");
+}
+
 $ch = curl_init($url);
 
-$curlHeaders = [];
+$curlHeaders = array();
 if (!empty($referrer)) {
     $curlHeaders[] = "Referer: " . urldecode($referrer);
 }
 $curlHeaders[] = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
 
-curl_setopt_array($ch, [
+curl_setopt_array($ch, array(
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HEADER => true,
     CURLOPT_HTTPHEADER => $curlHeaders,
     CURLOPT_TIMEOUT => 30,
-]);
+    CURLOPT_SSL_VERIFYPEER => false
+));
 
 $response = curl_exec($ch);
 
 if ($response === false) {
     header("HTTP/1.1 500 Internal Server Error");
+    error_log("CURL error for URL $url: " . curl_error($ch));
     echo "Error: " . curl_error($ch);
     curl_close($ch);
     exit;
@@ -80,6 +89,13 @@ $body = substr($response, $headerSize);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
+if ($httpCode != 200) {
+    http_response_code($httpCode);
+    error_log("HTTP error $httpCode for URL $url");
+    echo "HTTP Error: $httpCode";
+    exit;
+}
+
 // Zkontroluj jestli je to M3U8 playlist (nested)
 $isM3u8 = (strpos($body, '#EXTM3U') !== false);
 
@@ -89,6 +105,8 @@ if ($isM3u8) {
     header('Cache-Control: no-cache');
     
     $lines = explode("\n", $body);
+    $nextDepth = $depth + 1;
+    
     foreach ($lines as $line) {
         $line = trim($line);
         
@@ -98,20 +116,24 @@ if ($isM3u8) {
         
         // Pokud je to URL v tagu (např. #EXT-X-KEY:METHOD=AES-128,URI="...")
         if (strpos($line, '#') === 0 && strpos($line, 'URI=') !== false) {
-            // Zpracuj URI v tagu
-            $line = preg_replace_callback('/URI="([^"]+)"/', function($matches) use ($url, $channel, $sessionId, $referrer) {
-                $uri = $matches[1];
-                $absoluteUrl = makeAbsoluteUrl($uri, $url);
-                
-                // Proxy přes segment.php
-                $encodedUrl = urlencode($absoluteUrl);
-                $proxyUrl = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
-                if (!empty($referrer)) {
-                    $proxyUrl .= "&ref=" . urlencode($referrer);
-                }
-                return 'URI="' . $proxyUrl . '"';
-            }, $line);
-            echo $line . "\n";
+            // Zpracuj URI v tagu pomocí preg_replace_callback
+            $processedLine = preg_replace_callback(
+                '/URI="([^"]+)"/',
+                function($matches) use ($url, $channel, $sessionId, $referrer, $nextDepth) {
+                    $uri = $matches[1];
+                    $absoluteUrl = makeAbsoluteUrl($uri, $url);
+                    
+                    // Proxy přes segment.php
+                    $encodedUrl = urlencode($absoluteUrl);
+                    $proxyUrl = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId) . "&depth={$nextDepth}";
+                    if (!empty($referrer)) {
+                        $proxyUrl .= "&ref=" . urlencode($referrer);
+                    }
+                    return 'URI="' . $proxyUrl . '"';
+                },
+                $line
+            );
+            echo $processedLine . "\n";
         }
         // Pokud je to URL segment (ne komentář)
         else if (strpos($line, '#') !== 0 && !empty($line)) {
@@ -120,7 +142,7 @@ if ($isM3u8) {
             
             // Proxy URL přes náš tracking
             $encodedUrl = urlencode($absoluteUrl);
-            $proxyLine = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
+            $proxyLine = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId) . "&depth={$nextDepth}";
             if (!empty($referrer)) {
                 $proxyLine .= "&ref=" . urlencode($referrer);
             }
