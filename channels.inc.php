@@ -32,22 +32,32 @@ add_channel($chan_sk, "JOJ 24", "JOJ24", "https://joj24.noviny.sk/");
 add_channel($chan_sk, "JOJ Šport", "JOJSport", "https://jojsport.joj.sk");
 add_channel($chan_sk, "Jojko", "Jojko", "https://jojko.joj.sk");
 
-$slovakiaNote = array (
-    "    <br>",
-    "    <details>",
-    "        <summary>note: All Markiza channels need the Referer to be https://media.cms.markiza.sk/ and all Joj channels need https://media.joj.sk/!</summary>",
-    "        <pre style=\"background-color: gainsboro;\">//The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:",
-    "//Markiza",
-    "vlc --adaptive-use-access --http-referrer=https://media.cms.markiza.sk/ [URL]",
-    "mpv --http-header-fields=\"Referer: https://media.cms.markiza.sk/\" [URL]",
-    "//JOJ",
-    "vlc --adaptive-use-access --http-referrer=https://media.joj.sk/ [URL]",
-    "mpv --http-header-fields=\"Referer: https://media.joj.sk/\" [URL]",
-    "    </details>",
-    ""
-);
+$slovakiaNote = '
+    <div class="space-y-3">
+        <p class="font-semibold text-gray-800">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            All Markiza channels need the Referer to be <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.cms.markiza.sk/</code> and all Joj channels need <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.joj.sk/</code>!
+        </p>
+        <details class="bg-white p-4 rounded-lg border border-gray-200">
+            <summary class="cursor-pointer font-medium text-gray-700 hover:text-purple-600">Show VLC/MPV commands</summary>
+            <div class="mt-3 space-y-2 font-mono text-xs">
+                <p class="text-gray-600">The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:</p>
+                <div class="bg-gray-50 p-3 rounded border-l-4 border-blue-500">
+                    <p class="text-blue-600 font-semibold mb-2">Markiza:</p>
+                    <p>vlc --adaptive-use-access --http-referrer=https://media.cms.markiza.sk/ [URL]</p>
+                    <p>mpv --http-header-fields="Referer: https://media.cms.markiza.sk/" [URL]</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded border-l-4 border-green-500">
+                    <p class="text-green-600 font-semibold mb-2">JOJ:</p>
+                    <p>vlc --adaptive-use-access --http-referrer=https://media.joj.sk/ [URL]</p>
+                    <p>mpv --http-header-fields="Referer: https://media.joj.sk/" [URL]</p>
+                </div>
+            </div>
+        </details>
+    </div>
+';
 
-add_country($channels, "Slovakia", "sk", $chan_sk, implode("\n", $slovakiaNote));
+add_country($channels, "Slovakia", "sk", $chan_sk, $slovakiaNote);
 
 // Czech Republic
 $chan_cz = array();
@@ -84,19 +94,31 @@ add_channel($chan_cz, "CS Mystery", "CSMystery", "https://csmystery.joj.cz");
 //add_channel($chan_cz, "Prima Port", "PrimaPort", "https://iprima.cz");
 add_channel($chan_cz, "CNN Prima News", "PrimaNews", "https://cnn.iprima.cz/vysilani");
 
-$czechNote = array(
-    "    <br>",
-    "    <details>",
-    "        <summary>note: All Nova channels (Excluding TN Live) need the Referer to be https://media.cms.nova.cz/ ! All Prima channels need czech IP! </summary>",
-    "        <pre style=\"background-color: gainsboro;\">//The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:",
-    "vlc --adaptive-use-access --http-referrer=https://media.cms.nova.cz/ [URL]",
-    "mpv --http-header-fields=\"Referer: https://media.cms.nova.cz/\" [URL]",
-    "// Prima channels need czech IP or &forge=true added to the url. This doesn't work on some players.",
-    "    </details>",
-);
+$czechNote = '
+    <div class="space-y-3">
+        <p class="font-semibold text-gray-800">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            All Nova channels (Excluding TN Live) need the Referer to be <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.cms.nova.cz/</code>! All Prima channels need czech IP!
+        </p>
+        <details class="bg-white p-4 rounded-lg border border-gray-200">
+            <summary class="cursor-pointer font-medium text-gray-700 hover:text-purple-600">Show VLC/MPV commands</summary>
+            <div class="mt-3 space-y-2 font-mono text-xs">
+                <p class="text-gray-600">The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:</p>
+                <div class="bg-gray-50 p-3 rounded border-l-4 border-blue-500">
+                    <p class="text-blue-600 font-semibold mb-2">Nova:</p>
+                    <p>vlc --adaptive-use-access --http-referrer=https://media.cms.nova.cz/ [URL]</p>
+                    <p>mpv --http-header-fields="Referer: https://media.cms.nova.cz/" [URL]</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded border-l-4 border-orange-500">
+                    <p class="text-orange-600 font-semibold mb-2">Prima:</p>
+                    <p>Prima channels need czech IP or &forge=true added to the url. This doesn\'t work on some players.</p>
+                </div>
+            </div>
+        </details>
+    </div>
+';
 
-add_country($channels, "Czech Republic", "cz", $chan_cz, implode("\n", $czechNote));
-
+add_country($channels, "Czech Republic", "cz", $chan_cz, $czechNote);
 
 // Portugal
 $chan_pt = array();
