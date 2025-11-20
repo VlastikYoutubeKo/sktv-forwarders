@@ -1,26 +1,24 @@
 name: 🚀 Deploy
-
 on:
   push:
     branches: [ master ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       # Change envs
       - name: Replace secrets in files
         run: |
-          # Create temp files with replacements
+          # Replace in get.php
           envsubst '${SECRET_SKTV_PROXY_SK} ${SECRET_SKTV_PROXY_CZ}' < get.php > get.php.temp
           mv get.php.temp get.php
+          # Replace in get_url.php
+          envsubst '${SECRET_SKTV_PROXY_SK} ${SECRET_SKTV_PROXY_CZ}' < get_url.php > get_url.php.temp
+          mv get_url.php.temp get_url.php
         env:
           SECRET_SKTV_PROXY_SK: ${{ secrets.SECRET_SKTV_PROXY_SK }}
           SECRET_SKTV_PROXY_CZ: ${{ secrets.SECRET_SKTV_PROXY_CZ }}
-
       # Deploy
       - name: Upload from output to a remote server via FTP
         uses: modern-dev/ftp-mirror@v2
@@ -31,5 +29,4 @@ jobs:
           #local_dir: "./output"
           remote_dir: ${{ secrets.FTP_REMOTEDIR }}
           delete: "false"
-          exclude: ".git/ .github/ video_unavailable/generate_videos.sh video_unavailable/unavailable.psd video_unavailable/unavailable.png"
-
+          exclude: ".git/ .github/ video_unavailable/generate_videos.sh video_unavailable/unavailable.psd video_unavailable/unavailable.png viewers.db viewers.db-shm viewers.db-wal"
