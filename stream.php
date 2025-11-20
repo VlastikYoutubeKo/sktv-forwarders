@@ -36,6 +36,25 @@ if (!isset($streamUrl) || empty($streamUrl)) {
     die("Stream not found");
 }
 
+// Funkce pro vytvoření absolutní URL
+function makeAbsoluteUrl($url, $base) {
+    // Už je absolutní
+    if (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) {
+        return $url;
+    }
+    
+    $baseParts = parse_url($base);
+    
+    // Začíná lomítkem - absolutní cesta
+    if ($url[0] == '/') {
+        return $baseParts['scheme'] . '://' . $baseParts['host'] . $url;
+    }
+    
+    // Relativní cesta
+    $path = isset($baseParts['path']) ? dirname($baseParts['path']) : '';
+    return $baseParts['scheme'] . '://' . $baseParts['host'] . $path . '/' . $url;
+}
+
 // Načti obsah streamu
 $context = null;
 if (isset($referrer) && !empty($referrer)) {
@@ -58,12 +77,9 @@ $isDash = (strpos($content, '<MPD') !== false || strpos($content, '<?xml') !== f
 $isM3u8 = (strpos($content, '#EXTM3U') !== false);
 
 if ($isDash) {
-    // DASH/MPD formát - prostě redirectni přímo na originální URL s trackingem v header
-    // Přidej tracking ping
+    // DASH/MPD formát - prostě redirectni přímo na originální URL
     header('Content-Type: application/dash+xml');
     header('Cache-Control: no-cache');
-    
-    // Prostě výpis originálního obsahu - neparsuj XML!
     echo $content;
     
 } else if ($isM3u8) {
@@ -91,22 +107,37 @@ if ($isDash) {
             continue;
         }
         
-        // Pokud je to URL (ne komentář)
-        if (strpos($line, '#') !== 0 && !empty($line)) {
-            // Udělej absolutní URL pokud je relativní
-            if (strpos($line, 'http') !== 0) {
-                $baseUrl = dirname($streamUrl);
-                $line = $baseUrl . '/' . $line;
-            }
+        // Pokud je to URL v tagu (např. #EXT-X-KEY:METHOD=AES-128,URI="...")
+        if (strpos($line, '#') === 0 && strpos($line, 'URI=') !== false) {
+            // Zpracuj URI v tagu
+            $line = preg_replace_callback('/URI="([^"]+)"/', function($matches) use ($streamUrl, $channel, $sessionId, $referrer) {
+                $url = $matches[1];
+                $absoluteUrl = makeAbsoluteUrl($url, $streamUrl);
+                
+                // Proxy přes segment.php
+                $encodedUrl = urlencode($absoluteUrl);
+                $proxyUrl = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
+                if (isset($referrer) && !empty($referrer)) {
+                    $proxyUrl .= "&ref=" . urlencode($referrer);
+                }
+                return 'URI="' . $proxyUrl . '"';
+            }, $line);
+            echo $line . "\n";
+        }
+        // Pokud je to URL segment (ne komentář)
+        else if (strpos($line, '#') !== 0 && !empty($line)) {
+            // Udělaj absolutní URL
+            $absoluteUrl = makeAbsoluteUrl($line, $streamUrl);
             
             // Proxy URL přes náš tracking
-            $encodedUrl = urlencode($line);
+            $encodedUrl = urlencode($absoluteUrl);
             $proxyLine = "segment.php?url={$encodedUrl}&channel={$channel}&session=" . urlencode($sessionId);
             if (isset($referrer) && !empty($referrer)) {
                 $proxyLine .= "&ref=" . urlencode($referrer);
             }
             echo $proxyLine . "\n";
         } else {
+            // Komentář nebo tag bez URI
             echo $line . "\n";
         }
     }
