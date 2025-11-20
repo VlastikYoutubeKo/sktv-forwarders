@@ -125,6 +125,9 @@
                                 <i class="fas fa-tv mr-2"></i>Channel
                             </th>
                             <th class="px-6 py-3 text-left font-semibold">
+                                <i class="fas fa-users mr-2"></i>Viewers
+                            </th>
+                            <th class="px-6 py-3 text-left font-semibold">
                                 <i class="fas fa-link mr-2"></i>Streaming URL
                             </th>
                             <th class="px-6 py-3 text-left font-semibold">
@@ -141,7 +144,13 @@
                                 <?php echo htmlspecialchars($j["name"]); ?>
                             </td>
                             <td class="px-6 py-4">
-                                <a href="get.php?x=<?php echo $j["id"]; ?>" 
+                                <span data-channel-id="<?php echo htmlspecialchars($j["id"]); ?>" 
+                                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                                    <i class="fas fa-circle-notch fa-spin mr-1"></i>
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="stream.php?x=<?php echo $j["id"]; ?>" 
                                    class="channel-link text-blue-600 font-mono text-sm hover:text-blue-800">
                                     <?php echo htmlspecialchars($j["id"]); ?>
                                 </a>
@@ -196,5 +205,37 @@
             </p>
         </div>
     </div>
+
+    <script>
+        // Načti a zobraz statistiky
+        function updateStats() {
+            fetch('stats.php?action=get')
+                .then(response => response.json())
+                .then(stats => {
+                    document.querySelectorAll('[data-channel-id]').forEach(el => {
+                        const channelId = el.getAttribute('data-channel-id');
+                        const count = stats[channelId] || 0;
+                        el.innerHTML = `<i class="fas fa-eye mr-1"></i>${count}`;
+                        
+                        // Barevné označení podle počtu diváků
+                        el.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ';
+                        if (count === 0) {
+                            el.className += 'bg-gray-200 text-gray-800';
+                        } else if (count < 5) {
+                            el.className += 'bg-green-100 text-green-800';
+                        } else if (count < 10) {
+                            el.className += 'bg-blue-100 text-blue-800';
+                        } else {
+                            el.className += 'bg-red-100 text-red-800';
+                        }
+                    });
+                })
+                .catch(err => console.error('Error loading stats:', err));
+        }
+        
+        // Aktualizuj statistiky každých 5 sekund
+        updateStats();
+        setInterval(updateStats, 5000);
+    </script>
 </body>
 </html>
