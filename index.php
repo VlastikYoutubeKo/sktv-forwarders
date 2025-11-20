@@ -163,10 +163,10 @@
             </div>
             
             <?php if(!empty($i["note"])) { ?>
-            <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+            <div class="mt-4 bg-gradient-to-r from-purple-50 to-blue-50 border-l-4 border-purple-500 p-6 rounded-lg shadow-sm">
                 <div class="flex items-start">
-                    <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
-                    <div class="text-sm text-gray-700">
+                    <i class="fas fa-info-circle text-purple-600 text-xl mt-1 mr-3"></i>
+                    <div class="text-sm text-gray-700 flex-1">
                         <?php echo $i["note"]; ?>
                     </div>
                 </div>
