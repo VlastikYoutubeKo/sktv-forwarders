@@ -1,241 +1,334 @@
-<html lang="cs">
+<?php
+// Include channels definition
+include "channels.inc.php";
+?>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sktv forwarders revival</title>
+    <title>SKTV Forwarders Revival</title>
+    <meta name="description" content="Open-source TV streaming proxy">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto Mono', monospace;
-            /* Prostor pro Endora bannery - top i bottom */
-            padding-top: 60px;
-            padding-bottom: 60px;
-        }
-        
-        /* Responsivní padding pro mobily */
-        @media (max-width: 650px) {
-            body {
-                padding-top: 55px;
-                padding-bottom: 55px;
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#0B0F19',
+                        }
+                    }
+                }
             }
         }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; padding-top: 60px; padding-bottom: 60px; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
         
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
+        /* Glassmorphism for sticky header */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        
-        /* Gradient pozadí */
-        .header-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite;
+        .dark .glass-header {
+            background: rgba(17, 24, 39, 0.85);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        /* Card Hover Effect */
+        .channel-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        /* Hover efekty na tabulky */
-        tbody tr {
-            transition: all 0.2s ease;
+        .channel-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.1);
         }
-        
-        tbody tr:hover {
-            background-color: #f3f4f6;
-            transform: translateX(4px);
-        }
-        
-        /* Card design pro sekce */
-        .country-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .country-card:hover {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        /* Stylizace odkazů */
-        a.channel-link {
-            position: relative;
-            text-decoration: none;
-        }
-        
-        a.channel-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
-        }
-        
-        a.channel-link:hover::after {
-            width: 100%;
+        .dark .channel-card:hover {
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-    <!-- Header s gradientem -->
-    <div class="header-gradient text-white py-12 mb-8 shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-center space-x-3 text-5xl font-bold mb-4">
-                <h1 class="text-white drop-shadow-lg">sk</h1>
-                <h1 class="text-blue-200 drop-shadow-lg">tv</h1>
-                <h1 class="drop-shadow-lg">forwarders</h1>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="glass-header fixed w-full z-50 top-0 transition-colors duration-300">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Logo Area -->
+            <div class="flex items-center space-x-3 select-none">
+                <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-2 rounded-lg shadow-lg">
+                    <i class="fas fa-tower-broadcast text-lg"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="font-bold text-xl tracking-tight">sktv<span class="text-purple-600 dark:text-purple-400">forwarders</span></span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium">Revival Project</span>
+                </div>
             </div>
-            <p class="text-center text-lg opacity-90">
-                <i class="fas fa-tv mr-2"></i>
-                Open-source TV streaming proxy
-            </p>
-            <p class="text-center mt-2 text-sm opacity-75">
-                <i class="fab fa-github mr-1"></i>
-                licensed under AGPL-3.0-or-later, 
-                <a href="https://github.com/vlastikyoutubeko/sktv-forwarders" class="underline hover:text-blue-200 transition">source available</a>
-            </p>
+
+            <!-- Controls -->
+            <div class="flex items-center gap-4">
+                <!-- Search Input (Desktop) -->
+                <div class="hidden md:flex relative group">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 group-focus-within:text-purple-500 transition-colors"></i>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search channels..." 
+                           class="bg-gray-100 dark:bg-gray-900 text-sm rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-purple-500/50 border border-transparent focus:border-purple-500/50 transition-all">
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 focus:outline-none">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+                
+                <a href="https://github.com/vlastikyoutubeko/sktv-forwarders" class="hidden sm:block text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Input (Mobile) -->
+    <div class="md:hidden fixed top-16 left-0 w-full bg-white dark:bg-gray-900 z-40 px-4 py-3 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input type="text" id="mobileSearchInput" placeholder="Search channels..." 
+                   class="bg-gray-100 dark:bg-gray-800 text-sm rounded-lg pl-10 pr-4 py-2.5 w-full focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all">
         </div>
     </div>
 
-    <div class="container mx-auto px-4 pb-8">
-        <?php
-        include "channels.inc.php";
-        foreach($channels as $i) {
-        ?>
-        <div class="country-card mb-8 p-6">
-            <div class="flex items-center mb-6">
-                <i class="fas fa-broadcast-tower text-purple-600 text-2xl mr-3"></i>
-                <h2 class="text-3xl font-bold text-gray-800"><?php echo htmlspecialchars($i["name"]); ?></h2>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pt-24 pb-12 sm:pt-28">
+        
+        <?php foreach($channels as $i) { ?>
+        
+        <!-- Country Section -->
+        <div class="mb-12 country-section" data-country="<?php echo htmlspecialchars($i['name']); ?>">
+            <!-- Section Header -->
+            <div class="flex items-center mb-6 space-x-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                <!-- Flag based on country code if available, generic fallback -->
+                <?php if(isset($i['countrycode'])) { ?>
+                    <img src="https://flagcdn.com/24x18/<?php echo htmlspecialchars($i['countrycode']); ?>.png" alt="<?php echo htmlspecialchars($i['countrycode']); ?>" class="rounded shadow-sm">
+                <?php } else { ?>
+                    <i class="fas fa-globe text-gray-400"></i>
+                <?php } ?>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white"><?php echo htmlspecialchars($i["name"]); ?></h2>
             </div>
-            
-            <div class="overflow-x-auto rounded-lg border border-gray-200">
-                <table class="min-w-full">
-                    <thead class="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-                        <tr>
-                            <th class="px-6 py-3 text-left font-semibold">
-                                <i class="fas fa-tv mr-2"></i>Channel
-                            </th>
-                            <th class="px-6 py-3 text-left font-semibold">
-                                <i class="fas fa-users mr-2"></i>Viewers
-                            </th>
-                            <th class="px-6 py-3 text-left font-semibold">
-                                <i class="fas fa-link mr-2"></i>Streaming URL
-                            </th>
-                            <th class="px-6 py-3 text-left font-semibold">
-                                <i class="fas fa-external-link-alt mr-2"></i>Original URL
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <?php
-                        foreach($i["channels"] as $j) {
-                        ?>
-                        <tr>
-                            <td class="px-6 py-4 font-medium text-gray-900">
-                                <?php echo htmlspecialchars($j["name"]); ?>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span data-channel-id="<?php echo htmlspecialchars($j["id"]); ?>" 
-                                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
-                                    <i class="fas fa-circle-notch fa-spin mr-1"></i>
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="stream.php?x=<?php echo $j["id"]; ?>" 
-                                   class="channel-link text-blue-600 font-mono text-sm hover:text-blue-800">
-                                    <?php echo htmlspecialchars($j["id"]); ?>
-                                </a>
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="<?php echo $j["streamURL"]; ?>" 
-                                   class="channel-link text-blue-500 text-sm hover:text-blue-700"
-                                   target="_blank">
-                                    <?php echo htmlspecialchars(strlen($j["streamURL"]) > 40 ? (substr($j["streamURL"], 0, 37) . "...") : $j["streamURL"]); ?>
-                                    <i class="fas fa-external-link-alt ml-1 text-xs"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-            
+
+            <!-- Info Box (If Note exists) -->
             <?php if(!empty($i["note"])) { ?>
-            <div class="mt-4 bg-gradient-to-r from-purple-50 to-blue-50 border-l-4 border-purple-500 p-6 rounded-lg shadow-sm">
+            <div class="mb-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg shadow-sm">
                 <div class="flex items-start">
-                    <i class="fas fa-info-circle text-purple-600 text-xl mt-1 mr-3"></i>
-                    <div class="text-sm text-gray-700 flex-1">
+                    <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+                    <div class="text-sm text-blue-900 dark:text-blue-100 prose-sm max-w-none">
                         <?php echo $i["note"]; ?>
                     </div>
                 </div>
             </div>
             <?php } ?>
+
+            <!-- Channels Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <?php foreach($i["channels"] as $j) { ?>
+                
+                <!-- Channel Card -->
+                <div class="channel-card-wrapper">
+                    <div class="channel-card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden group flex flex-col h-full">
+                        <div class="p-5 flex-grow">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors channel-name">
+                                        <?php echo htmlspecialchars($j["name"]); ?>
+                                    </h3>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <button 
+                                            onclick="copyToClipboard('<?php echo htmlspecialchars($j["id"]); ?>')" 
+                                            class="text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer channel-id" 
+                                            title="Copy Channel ID">
+                                            <?php echo htmlspecialchars($j["id"]); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Viewer Badge -->
+                                <span data-channel-id="<?php echo htmlspecialchars($j["id"]); ?>" 
+                                      class="viewer-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700 transition-colors duration-500">
+                                    <i class="fas fa-circle-notch fa-spin mr-1.5 text-[10px]"></i> --
+                                </span>
+                            </div>
+
+                            <div class="flex gap-2 mt-2">
+                                <a href="stream.php?x=<?php echo $j["id"]; ?>" 
+                                   class="flex-1 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium py-2.5 px-4 rounded-lg text-center text-sm hover:bg-purple-600 dark:hover:bg-purple-400 hover:shadow-lg transition-all duration-300 flex items-center justify-center group-hover:gap-2">
+                                    <i class="fas fa-play text-xs"></i>
+                                    <span>Watch</span>
+                                </a>
+                                <button 
+                                    onclick="copyToClipboard('<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"; ?>/stream.php?x=<?php echo $j['id']; ?>')" 
+                                    class="p-2.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all"
+                                    title="Copy Stream URL">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Footer -->
+                        <div class="bg-gray-50 dark:bg-gray-800/50 px-5 py-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center text-xs">
+                            <span class="text-gray-500">Source</span>
+                            <a href="<?php echo $j["streamURL"]; ?>" target="_blank" 
+                               class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition-colors truncate max-w-[150px]">
+                                <?php echo htmlspecialchars(parse_url($j["streamURL"], PHP_URL_HOST)); ?>
+                                <i class="fas fa-external-link-alt text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
         </div>
-        <?php
-        }
-        ?>
-        
-        <!-- Privacy Notice -->
-        <div class="mt-8 pt-6 bg-blue-50 rounded-lg p-6 shadow-md">
-            <div class="max-w-4xl mx-auto">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
-                    <i class="fas fa-shield-alt text-blue-600 mr-2"></i>
-                    Privacy & Viewer Statistics
-                </h3>
-                <div class="text-sm text-gray-700 space-y-2">
-                    <p>
-                        <strong>What we track:</strong> We collect minimal data (channel name, session ID, timestamp) 
-                        <strong>only</strong> to display live viewer counts. Your data is automatically deleted after 30 seconds of inactivity.
-                    </p>
-                    <p>
-                        <strong>What we DON'T track:</strong> IP addresses, personal information, viewing history, or any other identifying data.
-                    </p>
-                    <p>
-                        <strong>Opt-out:</strong> Use the "Original URL" links to bypass our proxy and avoid any tracking.
-                    </p>
-                    <div class="mt-3">
-                        <a href="privacy.php" class="text-blue-600 hover:text-blue-800 underline font-medium">
-                            <i class="fas fa-file-alt mr-1"></i>
-                            Read Full Privacy Policy & Terms of Service
-                        </a>
+        <?php } ?>
+
+        <!-- Privacy Notice Card -->
+        <div class="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800">
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex items-center mb-4">
+                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mr-3">
+                            <i class="fas fa-shield-alt text-blue-600 dark:text-blue-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Privacy & Data Transparency</h3>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        <div>
+                            <p class="mb-2"><strong class="text-gray-900 dark:text-gray-200">What we track:</strong> Channel name, random session ID, and timestamp for live viewer counts only.</p>
+                            <p><strong class="text-gray-900 dark:text-gray-200">Retention:</strong> Data is automatically deleted after 30 seconds of inactivity.</p>
+                        </div>
+                        <div>
+                            <p class="mb-2"><strong class="text-gray-900 dark:text-gray-200">We DON'T track:</strong> IP addresses, personal info, or viewing history.</p>
+                            <p><a href="privacy.php" class="text-purple-600 dark:text-purple-400 hover:underline font-medium">Read Full Policy &rarr;</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Footer -->
-        <div class="mt-12 pt-8 border-t border-gray-300">
-            <p class="text-center text-sm text-gray-600 mb-2">
-                &copy; <?php echo date("Y"); ?> Created originally by an author who doesn't want to be disclosed, 
-                now maintained by <a href="https://santomet.eu" class="text-purple-600 hover:underline">santomet</a>
-            </p>
-            <p class="text-center text-sm text-gray-600 mb-2">
-                Redesigned by <a href="https://mxnticek.eu" class="text-blue-600 hover:underline">mxnticek</a> 
-                using <a href="https://claude.ai/" class="text-blue-600 hover:underline">Claude</a>
-            </p>
-            <p class="text-center text-xs text-gray-500 italic max-w-3xl mx-auto mt-4">
-                <i class="fas fa-exclamation-triangle mr-1"></i>
-                Disclaimer: This project is an open-source initiative provided for educational purposes only. 
-                The software and scripts contained herein are intended to be used exclusively by individuals who have 
-                legitimate access to the resources, such as by completing any required registrations or residing in 
-                regions where access is permitted by the content provider.
-            </p>
+        <footer class="mt-16 pt-8 text-center md:text-left">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div class="col-span-1">
+                    <div class="flex items-center justify-center md:justify-start space-x-2 mb-4">
+                        <i class="fas fa-tower-broadcast text-purple-600"></i>
+                        <span class="font-bold text-lg text-gray-900 dark:text-white">sktv forwarders</span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                        Created originally by an author who doesn't want to be disclosed, now maintained by <a href="https://santomet.eu" class="text-purple-600 hover:underline">santomet</a>.
+                    </p>
+                </div>
+                <div class="col-span-2 flex flex-col md:items-end justify-center">
+                    <div class="flex space-x-6 mb-4 justify-center md:justify-end">
+                        <a href="privacy.php" class="text-gray-500 hover:text-purple-600 dark:hover:text-purple-400 text-sm font-medium transition-colors">Privacy Policy</a>
+                        <a href="https://github.com/vlastikyoutubeko/sktv-forwarders" class="text-gray-500 hover:text-purple-600 dark:hover:text-purple-400 text-sm font-medium transition-colors">GitHub</a>
+                    </div>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 max-w-md">
+                        Disclaimer: This project is for educational purposes only. Users must have legitimate access to the resources.
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
+        <div class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3">
+            <i class="fas fa-check-circle text-green-400 dark:text-green-600"></i>
+            <span class="font-medium text-sm">Copied to clipboard!</span>
         </div>
     </div>
 
     <script>
-        // Načti a zobraz statistiky
+        // --- Theme Toggle Logic ---
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // --- Search Logic ---
+        const desktopSearch = document.getElementById('searchInput');
+        const mobileSearch = document.getElementById('mobileSearchInput');
+        
+        function filterChannels(query) {
+            query = query.toLowerCase().trim();
+            document.querySelectorAll('.channel-card-wrapper').forEach(wrapper => {
+                const name = wrapper.querySelector('.channel-name').innerText.toLowerCase();
+                const id = wrapper.querySelector('.channel-id').innerText.toLowerCase();
+                
+                if (name.includes(query) || id.includes(query)) {
+                    wrapper.style.display = '';
+                } else {
+                    wrapper.style.display = 'none';
+                }
+            });
+        }
+
+        [desktopSearch, mobileSearch].forEach(input => {
+            input.addEventListener('input', (e) => filterChannels(e.target.value));
+        });
+
+        // --- Copy to Clipboard ---
+        window.copyToClipboard = function(text) {
+            // Modern API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => showToast());
+            } else {
+                // Fallback for HTTP
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                } catch (err) {
+                    console.error('Unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2000);
+        }
+
+        // --- Viewer Stats Logic ---
         function updateStats() {
             fetch('stats.php?action=get')
                 .then(response => response.json())
@@ -243,25 +336,27 @@
                     document.querySelectorAll('[data-channel-id]').forEach(el => {
                         const channelId = el.getAttribute('data-channel-id');
                         const count = stats[channelId] || 0;
-                        el.innerHTML = `<i class="fas fa-eye mr-1"></i>${count}`;
                         
-                        // Barevné označení podle počtu diváků
-                        el.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ';
+                        el.innerHTML = `<i class="fas fa-eye mr-1.5 text-[10px]"></i> ${count}`;
+                        
+                        // Reset classes
+                        el.className = 'viewer-badge inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-500 border ';
+                        
                         if (count === 0) {
-                            el.className += 'bg-gray-200 text-gray-800';
+                            el.className += 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700';
                         } else if (count < 5) {
-                            el.className += 'bg-green-100 text-green-800';
+                            el.className += 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-900/50';
                         } else if (count < 10) {
-                            el.className += 'bg-blue-100 text-blue-800';
+                            el.className += 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-900/50';
                         } else {
-                            el.className += 'bg-red-100 text-red-800';
+                            el.className += 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-900/50 animate-pulse';
                         }
                     });
                 })
                 .catch(err => console.error('Error loading stats:', err));
         }
         
-        // Aktualizuj statistiky každých 5 sekund
+        // Initial load and interval
         updateStats();
         setInterval(updateStats, 5000);
     </script>
