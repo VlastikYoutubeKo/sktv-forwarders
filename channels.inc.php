@@ -9,7 +9,7 @@ function add_country(&$arr, $name, $countrycode, $channels, $note = "") {
 
 $channels = array();
 
-// Slovakia
+// --- Slovakia ---
 $chan_sk = array();
 add_channel($chan_sk, "Jednotka", "STV1", "https://www.rtvs.sk/televizia/live-1");
 add_channel($chan_sk, "Dvojka", "STV2", "https://www.rtvs.sk/televizia/live-2");
@@ -32,26 +32,58 @@ add_channel($chan_sk, "JOJ 24", "JOJ24", "https://joj24.noviny.sk/");
 add_channel($chan_sk, "JOJ Šport", "JOJSport", "https://jojsport.joj.sk");
 add_channel($chan_sk, "Jojko", "Jojko", "https://jojko.joj.sk");
 
+// Updated HTML Design for Slovakia Note
 $slovakiaNote = '
     <div class="space-y-3">
-        <p class="font-semibold text-gray-800">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            All Markiza channels need the Referer to be <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.cms.markiza.sk/</code> and all Joj channels need <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.joj.sk/</code>!
+        <p class="font-medium text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
+            <i class="fas fa-exclamation-triangle mr-1.5 text-orange-500"></i>
+            Markiza channels require Referer: <code class="font-mono text-xs bg-white/60 dark:bg-black/30 px-1.5 py-0.5 rounded text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-800/50">https://media.cms.markiza.sk/</code> 
+            <br class="hidden sm:block mb-1">
+            Joj channels require Referer: <code class="font-mono text-xs bg-white/60 dark:bg-black/30 px-1.5 py-0.5 rounded text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-800/50">https://media.joj.sk/</code>
         </p>
-        <details class="bg-white p-4 rounded-lg border border-gray-200">
-            <summary class="cursor-pointer font-medium text-gray-700 hover:text-purple-600">Show VLC/MPV commands</summary>
-            <div class="mt-3 space-y-2 font-mono text-xs">
-                <p class="text-gray-600">The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:</p>
-                <div class="bg-gray-50 p-3 rounded border-l-4 border-blue-500">
-                    <p class="text-blue-600 font-semibold mb-2">Markiza:</p>
-                    <p>vlc --adaptive-use-access --http-referrer=https://media.cms.markiza.sk/ [URL]</p>
-                    <p>mpv --http-header-fields="Referer: https://media.cms.markiza.sk/" [URL]</p>
+        
+        <details class="group bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-lg border border-blue-200 dark:border-blue-800/50 overflow-hidden transition-all duration-300">
+            <summary class="cursor-pointer p-3 font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-between select-none">
+                <span><i class="fas fa-terminal mr-2 text-gray-400"></i>Show VLC/MPV commands</span>
+                <i class="fas fa-chevron-down text-xs text-gray-400 group-open:rotate-180 transition-transform"></i>
+            </summary>
+            
+            <div class="p-4 space-y-4 border-t border-blue-100 dark:border-blue-800/30 bg-gray-50/50 dark:bg-gray-950/30 text-xs">
+                
+                <!-- Markiza Block -->
+                <div class="bg-white dark:bg-gray-900 rounded border-l-4 border-blue-500 shadow-sm overflow-hidden">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 px-3 py-1.5 border-b border-blue-100 dark:border-blue-800/50">
+                        <span class="font-bold text-blue-700 dark:text-blue-400">Markiza Config</span>
+                    </div>
+                    <div class="p-3 font-mono text-gray-600 dark:text-gray-400 break-all space-y-2">
+                        <div>
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">VLC</span>
+                            <span class="text-gray-800 dark:text-gray-200">vlc --adaptive-use-access --http-referrer=https://media.cms.markiza.sk/ [URL]</span>
+                        </div>
+                        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">MPV</span>
+                            <span class="text-gray-800 dark:text-gray-200">mpv --http-header-fields="Referer: https://media.cms.markiza.sk/" [URL]</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-gray-50 p-3 rounded border-l-4 border-green-500">
-                    <p class="text-green-600 font-semibold mb-2">JOJ:</p>
-                    <p>vlc --adaptive-use-access --http-referrer=https://media.joj.sk/ [URL]</p>
-                    <p>mpv --http-header-fields="Referer: https://media.joj.sk/" [URL]</p>
+
+                <!-- JOJ Block -->
+                <div class="bg-white dark:bg-gray-900 rounded border-l-4 border-green-500 shadow-sm overflow-hidden">
+                    <div class="bg-green-50 dark:bg-green-900/20 px-3 py-1.5 border-b border-green-100 dark:border-green-800/50">
+                        <span class="font-bold text-green-700 dark:text-green-400">JOJ Config</span>
+                    </div>
+                    <div class="p-3 font-mono text-gray-600 dark:text-gray-400 break-all space-y-2">
+                        <div>
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">VLC</span>
+                            <span class="text-gray-800 dark:text-gray-200">vlc --adaptive-use-access --http-referrer=https://media.joj.sk/ [URL]</span>
+                        </div>
+                        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">MPV</span>
+                            <span class="text-gray-800 dark:text-gray-200">mpv --http-header-fields="Referer: https://media.joj.sk/" [URL]</span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </details>
     </div>
@@ -59,7 +91,8 @@ $slovakiaNote = '
 
 add_country($channels, "Slovakia", "sk", $chan_sk, $slovakiaNote);
 
-// Czech Republic
+
+// --- Czech Republic ---
 $chan_cz = array();
 add_channel($chan_cz, "ČT1", "CT1", "https://www.ceskatelevize.cz/zive/ct1/");
 add_channel($chan_cz, "ČT2", "CT2", "https://www.ceskatelevize.cz/zive/ct2/");
@@ -94,25 +127,51 @@ add_channel($chan_cz, "CS Mystery", "CSMystery", "https://csmystery.joj.cz");
 //add_channel($chan_cz, "Prima Port", "PrimaPort", "https://iprima.cz");
 add_channel($chan_cz, "CNN Prima News", "PrimaNews", "https://cnn.iprima.cz/vysilani");
 
+// Updated HTML Design for Czech Note
 $czechNote = '
     <div class="space-y-3">
-        <p class="font-semibold text-gray-800">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            All Nova channels (Excluding TN Live) need the Referer to be <code class="bg-purple-100 px-2 py-1 rounded text-purple-800">https://media.cms.nova.cz/</code>! All Prima channels need czech IP!
+        <p class="font-medium text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
+            <i class="fas fa-shield-alt mr-1.5 text-orange-500"></i>
+            Nova channels need Referer: <code class="font-mono text-xs bg-white/60 dark:bg-black/30 px-1.5 py-0.5 rounded text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-800/50">https://media.cms.nova.cz/</code>
+            <br class="hidden sm:block mb-1">
+            <span class="text-orange-600 dark:text-orange-400 font-bold">Prima channels require a Czech IP!</span>
         </p>
-        <details class="bg-white p-4 rounded-lg border border-gray-200">
-            <summary class="cursor-pointer font-medium text-gray-700 hover:text-purple-600">Show VLC/MPV commands</summary>
-            <div class="mt-3 space-y-2 font-mono text-xs">
-                <p class="text-gray-600">The #EXTVLCOPT is already present in the m3u8, however, it does not work properly in some versions of VLC. Use explicit command for your favourite player:</p>
-                <div class="bg-gray-50 p-3 rounded border-l-4 border-blue-500">
-                    <p class="text-blue-600 font-semibold mb-2">Nova:</p>
-                    <p>vlc --adaptive-use-access --http-referrer=https://media.cms.nova.cz/ [URL]</p>
-                    <p>mpv --http-header-fields="Referer: https://media.cms.nova.cz/" [URL]</p>
+        
+        <details class="group bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-lg border border-blue-200 dark:border-blue-800/50 overflow-hidden transition-all duration-300">
+            <summary class="cursor-pointer p-3 font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-between select-none">
+                <span><i class="fas fa-terminal mr-2 text-gray-400"></i>Show VLC/MPV commands</span>
+                <i class="fas fa-chevron-down text-xs text-gray-400 group-open:rotate-180 transition-transform"></i>
+            </summary>
+            
+            <div class="p-4 space-y-4 border-t border-blue-100 dark:border-blue-800/30 bg-gray-50/50 dark:bg-gray-950/30 text-xs">
+                
+                <!-- Nova Block -->
+                <div class="bg-white dark:bg-gray-900 rounded border-l-4 border-blue-500 shadow-sm overflow-hidden">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 px-3 py-1.5 border-b border-blue-100 dark:border-blue-800/50">
+                        <span class="font-bold text-blue-700 dark:text-blue-400">Nova Config</span>
+                    </div>
+                    <div class="p-3 font-mono text-gray-600 dark:text-gray-400 break-all space-y-2">
+                        <div>
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">VLC</span>
+                            <span class="text-gray-800 dark:text-gray-200">vlc --adaptive-use-access --http-referrer=https://media.cms.nova.cz/ [URL]</span>
+                        </div>
+                        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                            <span class="select-none text-gray-400 block text-[10px] uppercase">MPV</span>
+                            <span class="text-gray-800 dark:text-gray-200">mpv --http-header-fields="Referer: https://media.cms.nova.cz/" [URL]</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-gray-50 p-3 rounded border-l-4 border-orange-500">
-                    <p class="text-orange-600 font-semibold mb-2">Prima:</p>
-                    <p>Prima channels need czech IP or &forge=true added to the url. This doesn\'t work on some players.</p>
+
+                <!-- Prima Block -->
+                <div class="bg-white dark:bg-gray-900 rounded border-l-4 border-orange-500 shadow-sm overflow-hidden">
+                    <div class="bg-orange-50 dark:bg-orange-900/20 px-3 py-1.5 border-b border-orange-100 dark:border-orange-800/50">
+                        <span class="font-bold text-orange-700 dark:text-orange-400">Prima Geo-Block</span>
+                    </div>
+                    <div class="p-3 text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Prima channels strictly enforce Geo-Location. You must be in the Czech Republic or use a VPN. Adding <code class="font-mono text-xs bg-gray-100 dark:bg-gray-800 px-1 rounded">&forge=true</code> to the URL might help, but support is limited.
+                    </div>
                 </div>
+
             </div>
         </details>
     </div>
@@ -120,8 +179,9 @@ $czechNote = '
 
 add_country($channels, "Czech Republic", "cz", $chan_cz, $czechNote);
 
-// Portugal
+// --- Portugal ---
 $chan_pt = array();
 add_channel($chan_pt, "CNN Portugal", "CNN_Portugal", "https://cnnportugal.iol.pt/direto");
 
 add_country($channels, "Portugal", "pt", $chan_pt);
+?>
