@@ -244,7 +244,7 @@ $baseUrl = $protocol . "://" . $host . $path;
                         <span class="font-bold text-lg text-gray-900 dark:text-white">sktv forwarders</span>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                        Created originally by an author who doesn't want to be disclosed, now maintained by <a href="https://santomet.eu" class="text-purple-600 hover:underline">santomet</a>.
+                        Created originally by an author who doesn't want to be disclosed, previously maintained by <a href="https://santomet.eu" class="text-purple-600 hover:underline">santomet</a>, new version rewritten with <a href="https://claude.ai" class="text-purple-600 hover:underline">Claude Sonnet 4.5</a> & <a href="https://gemini.google.com/" class="text-purple-600 hover:underline">Gemini 3 Pro</a>.<br>Now maintained by <a href="https://mxnticek.eu" class="text-purple-600 hover:underline">mxnticek / cyn</a>.
                     </p>
                 </div>
                 <div class="col-span-2 flex flex-col md:items-end justify-center">
