@@ -33,6 +33,7 @@ $channels = [
     "Dajto" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "dajto", "referer" => "https://media.cms.markiza.sk/"],
     "Krimi" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "krimi", "referer" => "https://media.cms.markiza.sk/"],
     "Klasik" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "klasik", "referer" => "https://media.cms.markiza.sk/"],
+    "Markíza TN Live" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "IQZz0dRJL34_tn", "referer" => "https://media.cms.markiza.sk/"],
 
     "JOJ" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj-1080", "referer" => "https://media.joj.sk/"],
     "JOJ Plus" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "plus-1080", "referer" => "https://media.joj.sk/"],
