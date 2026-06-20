@@ -63,7 +63,34 @@ $uiChannels = array_values($groupedChannels);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKTV V2 – Premium Forwarders</title>
+    <title>SKTV V2 – Premium Forwarders | Sledujte CZ/SK TV online</title>
+    <meta name="description" content="SKTV V2 Forwarders nabízí revoluční přístup k přehrávání CZ a SK televizních kanálů bez hranic, s nulovou zátěží pásma a naprostým soukromím.">
+    <meta name="keywords" content="SKTV, televize, CZ TV, SK TV, online televize, m3u8 playlist, iptv proxy">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sktv.mxnticek.eu/">
+    <meta property="og:title" content="SKTV V2 – Premium TV Forwarders">
+    <meta property="og:description" content="Sledujte české a slovenské televizní kanály online přes naší revoluční zero-bandwidth proxy.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="SKTV V2 – Premium TV Forwarders">
+    <meta property="twitter:description" content="Sledujte české a slovenské televizní kanály online přes naší revoluční zero-bandwidth proxy.">
+
+    <!-- Schema.org Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SKTV V2 Forwarders",
+      "description": "Online platforma pro přesměrování a bezpečné přehrávání českých a slovenských televizních kanálů z oficiálních API bez zatěžování serveru.",
+      "url": "https://sktv.mxnticek.eu/",
+      "applicationCategory": "EntertainmentApplication",
+      "operatingSystem": "All"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -124,9 +151,9 @@ $uiChannels = array_values($groupedChannels);
                     <i class="fas fa-play text-xl ml-1"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 tracking-tight block">
                         SKTV<span class="font-light">v2</span>
-                    </h1>
+                    </span>
                     <div class="flex items-center gap-2">
                         <span class="relative flex h-2 w-2">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -155,9 +182,9 @@ $uiChannels = array_values($groupedChannels);
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider mb-6 border border-brand-200 dark:border-brand-800/50">
                 <i class="fas fa-bolt"></i> Nová generace proxy
             </div>
-            <h2 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-gray-900 dark:text-white leading-tight">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-gray-900 dark:text-white leading-tight">
                 Televize <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-pink-500 animate-gradient-x">bez hranic.</span>
-            </h2>
+            </h1>
             <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
                 Revoluční API bypass s rezidenčními IP. Extrémní spolehlivost, <strong>nulová zátěž pásma</strong>, dokonalý zážitek. Vítejte ve verzi 2.
             </p>

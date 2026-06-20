@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O projektu & Tech Stack – SKTV V2</title>
+    <title>O projektu & Tech Stack – SKTV V2 | Privacy Policy</title>
+    <meta name="description" content="Přečtěte si, jak funguje SKTV V2 pod kapotou, jak chráníme vaše soukromí a jak můžete podpořit provoz našich rezidenčních proxy sítí.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sktv.mxnticek.eu/privacy.php">
+    <meta property="og:title" content="O projektu & Tech Stack – SKTV V2">
+    <meta property="og:description" content="Přečtěte si, jak funguje SKTV V2 a jak chráníme vaše soukromí.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
