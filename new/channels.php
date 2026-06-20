@@ -34,15 +34,28 @@ $channels = [
     "Klasik" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "klasik", "referer" => "https://media.cms.markiza.sk/"],
 
     "JOJ" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj-1080", "referer" => "https://media.joj.sk/"],
-    "JOJP" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "plus-1080", "referer" => "https://media.joj.sk/"],
+    "JOJ Plus" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "plus-1080", "referer" => "https://media.joj.sk/"],
     "Wau" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "wau-1080", "referer" => "https://media.joj.sk/"],
-    "JOJ24" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj_news-1080", "referer" => "https://media.joj.sk/"],
-    "JOJFamily" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "family-1080", "referer" => "https://media.joj.sk/"],
+    "JOJ 24" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj_news-1080", "referer" => "https://media.joj.sk/"],
+    "JOJ Šport" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj_sport-1080", "referer" => "https://media.joj.sk/"],
+    "Jojko" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "jojko-1080", "referer" => "https://media.joj.sk/"],
+    "JOJ Family" => ["group" => "CZ", "fetcher" => "joj_fetcher", "id" => "family-1080", "referer" => "https://media.joj.sk/"],
+    "JOJ Cinema" => ["group" => "CZ", "fetcher" => "joj_fetcher", "id" => "cinema-1080", "referer" => "https://media.joj.sk/"],
+    "CS Film" => ["group" => "CZ", "fetcher" => "joj_fetcher", "id" => "cs_film-1080", "referer" => "https://media.joj.sk/"],
+    "CS History" => ["group" => "CZ", "fetcher" => "joj_fetcher", "id" => "cs_history-1080", "referer" => "https://media.joj.sk/"],
+    "CS Mystery" => ["group" => "CZ", "fetcher" => "joj_fetcher", "id" => "cs_mystery-1080", "referer" => "https://media.joj.sk/"],
 
     "Jednotka" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "1", "referer" => ""],
     "Dvojka" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "2", "referer" => ""],
     "STVR :24" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "3", "referer" => ""],
-    "Šport" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "6", "referer" => ""]
+    "STVR :O" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "4", "referer" => ""],
+    "NR SR" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "5", "referer" => ""],
+    "STVR Live" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "6", "referer" => ""],
+    "Šport" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "15", "referer" => ""],
+    
+    "TA3" => ["group" => "SK", "fetcher" => "ta3_fetcher", "id" => "ta3", "referer" => ""],
+    
+    "ČT sport Plus" => ["group" => "CZ", "fetcher" => "ct_fetcher", "id" => "CH_25", "referer" => ""]
 ];
 
 return $channels;

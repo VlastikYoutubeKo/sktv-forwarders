@@ -108,3 +108,12 @@ function stv_fetcher($id) {
     $json = json_decode($resp, true);
     return $json["clip"]["sources"][0]["src"] ?? null;
 }
+
+function ta3_fetcher($id) {
+    $content = curl_fetch("https://embed.livebox.cz/ta3_v2/live-source.js");
+    if (!$content) return null;
+    if (preg_match('/" : "([^"]+)"/', $content, $matches)) {
+        return "https:" . $matches[1];
+    }
+    return null;
+}
