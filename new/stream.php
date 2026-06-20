@@ -16,6 +16,32 @@ $fetcher = $channelData['fetcher'];
 $id = $channelData['id'];
 $referer = $channelData['referer'];
 
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+$host = $_SERVER['HTTP_HOST'];
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$dir = rtrim(dirname($path), '/');
+$baseUrl = $protocol . $host . $dir;
+
+// Detekce robotů (Discord, Telegram, Twitter atd.) - šetříme API limity a nepočítáme je do statistik
+$userAgent = strtolower($_SERVER['HTTP_USER_AGENT'] ?? '');
+if (preg_match('/discordbot|twitterbot|telegrambot|vkshare|facebookexternalhit|whatsapp|slackbot|linkedinbot|pinterest|slurp|yahoou|baiduspider|googlebot|bingbot/i', $userAgent)) {
+    $countryCode = strtolower($channelData['group']); // 'cz' nebo 'sk'
+    $flagUrl = "https://flagcdn.com/w1280/" . $countryCode . ".png";
+    
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html><head>';
+    echo '<title>Živě: ' . htmlspecialchars($chName) . ' | SKTV V2</title>';
+    echo '<meta property="og:type" content="video.other">';
+    echo '<meta property="og:title" content="🔴 Živé vysílání: ' . htmlspecialchars($chName) . '">';
+    echo '<meta property="og:description" content="Sledujte kanál ' . htmlspecialchars($chName) . ' živě přes prémiovou SKTV V2 proxy s nulovou zátěží pásma. Kliknutím spustíte stream.">';
+    echo '<meta property="og:image" content="' . $flagUrl . '">';
+    echo '<meta property="og:url" content="' . $baseUrl . '/stream.php?ch=' . rawurlencode($chName) . '&proxy=' . $proxy . '">';
+    echo '<meta name="twitter:card" content="summary_large_image">';
+    echo '<meta name="theme-color" content="#8b5cf6">';
+    echo '</head><body><script>window.location.href="' . $baseUrl . '";</script></body></html>';
+    exit;
+}
+
 // Ping stats
 try {
     $db = new SQLite3("viewers.db");
