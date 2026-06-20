@@ -19,6 +19,7 @@ $channels = [
     "NovaGold" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-gold-", "referer" => "https://media.cms.nova.cz/"],
     "NovaCinema" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-cinema-", "referer" => "https://media.cms.nova.cz/"],
     "NovaAction" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-action-", "referer" => "https://media.cms.nova.cz/"],
+    "Nova TN Live" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "tnlive", "referer" => "https://mediatn.cms.nova.cz/"],
 
     "CT1" => ["group" => "CZ", "fetcher" => "ct_fetcher", "id" => "CH_1", "referer" => ""],
     "CT2" => ["group" => "CZ", "fetcher" => "ct_fetcher", "id" => "CH_2", "referer" => ""],

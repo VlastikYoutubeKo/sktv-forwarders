@@ -81,6 +81,17 @@ function prima_fetcher($id) {
 }
 
 function nova_fetcher($id) {
+    if ($id === "tnlive") {
+        $api_url = "https://tn.nova.cz/api/v1/tnlive/livestream?tnlive_channel_id=4";
+        $api_resp = curl_fetch($api_url, "https://tn.nova.cz/");
+        $data = json_decode($api_resp, true);
+        if (isset($data['short']) && !empty($data['short'])) {
+            $id = $data['short'] . "_tn";
+        } else {
+            return null; // Stream is not currently active
+        }
+    }
+
     if (strpos($id, "_tn") !== false) {
         $real_id = str_replace("_tn", "", $id);
         $resp = curl_fetch("https://mediatn.cms.nova.cz/embed/" . $real_id . "?autoplay=1", "https://mediatn.cms.nova.cz/");
