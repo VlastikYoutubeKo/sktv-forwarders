@@ -39,10 +39,10 @@ $channels = [
     "JOJ24" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj_news-1080", "referer" => "https://media.joj.sk/"],
     "JOJFamily" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "family-1080", "referer" => "https://media.joj.sk/"],
 
-    "STV1" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "1", "referer" => ""],
-    "STV2" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "2", "referer" => ""],
-    "STV24" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "3", "referer" => ""],
-    "RTVS" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "6", "referer" => ""]
+    "Jednotka" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "1", "referer" => ""],
+    "Dvojka" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "2", "referer" => ""],
+    "STVR :24" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "3", "referer" => ""],
+    "Šport" => ["group" => "SK", "fetcher" => "stv_fetcher", "id" => "6", "referer" => ""]
 ];
 
 return $channels;

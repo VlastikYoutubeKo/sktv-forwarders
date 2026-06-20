@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /new/stream.php
+Disallow: /new/proxy.php
+Disallow: /new/stats.php
+Disallow: /old/

@@ -228,7 +228,7 @@ $uiChannels = array_values($groupedChannels);
                                 </div>
                             </div>
                             <div class="mt-auto pt-6 flex gap-3">
-                                <a href="stream.php?ch=<?php echo $j["id"]; ?>&proxy=0" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold py-3 rounded-xl text-center shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                                <a href="stream.php?ch=<?php echo $j["id"]; ?>&proxy=0" rel="nofollow" class="flex-1 bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold py-3 rounded-xl text-center shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-play text-xs"></i> Přehrát
                                 </a>
                                 <button onclick="copyToClipboard('<?php echo $baseUrl; ?>/stream.php?ch=<?php echo $j['id']; ?>&proxy=0')" class="w-12 flex-shrink-0 bg-gray-100 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-200 dark:hover:bg-dark-900 hover:text-brand-500 transition-all" title="Kopírovat odkaz">

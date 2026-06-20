@@ -103,7 +103,7 @@ function joj_fetcher($id) {
 }
 
 function stv_fetcher($id) {
-    $resp = curl_fetch("https://www.rtvs.sk/json/live5f.json?c=" . $id . "&b=msie&p=win&v=11&f=0&d=1");
+    $resp = curl_fetch("https://www.stvr.sk/json/live5f.json?c=" . $id . "&b=msie&p=win&v=11&f=0&d=1");
     if (!$resp) return null;
     $json = json_decode($resp, true);
     return $json["clip"]["sources"][0]["src"] ?? null;
