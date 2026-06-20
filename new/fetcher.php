@@ -23,8 +23,16 @@ function curl_fetch($url, $referer = "", $proxy_region = null) {
     
     global $cz_proxies, $sk_proxies;
     if (empty($cz_proxies) && file_exists(__DIR__ . '/config.php')) {
-        require_once __DIR__ . '/config.php';
+        // We must include it in global scope, so we use a closure or just require and assign
+        require __DIR__ . '/config.php';
+        if (isset($cz_proxies)) {
+            $GLOBALS['cz_proxies'] = $cz_proxies;
+            $GLOBALS['sk_proxies'] = $sk_proxies;
+        }
     }
+    // Re-assign local vars from globals if they were just loaded
+    $cz_proxies = $GLOBALS['cz_proxies'] ?? [];
+    $sk_proxies = $GLOBALS['sk_proxies'] ?? [];
 
     if ($proxy_region === 'CZ' && !empty($cz_proxies)) {
         $randomProxy = $cz_proxies[array_rand($cz_proxies)];
