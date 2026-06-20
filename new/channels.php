@@ -19,7 +19,6 @@ $channels = [
     "NovaGold" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-gold-", "referer" => "https://media.cms.nova.cz/"],
     "NovaCinema" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-cinema-", "referer" => "https://media.cms.nova.cz/"],
     "NovaAction" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "nova-action-", "referer" => "https://media.cms.nova.cz/"],
-    "Nova TN Live" => ["group" => "CZ", "fetcher" => "nova_fetcher", "id" => "ETpdC5paJa8_tn", "referer" => "https://mediatn.cms.nova.cz/"],
 
     "CT1" => ["group" => "CZ", "fetcher" => "ct_fetcher", "id" => "CH_1", "referer" => ""],
     "CT2" => ["group" => "CZ", "fetcher" => "ct_fetcher", "id" => "CH_2", "referer" => ""],
@@ -33,7 +32,6 @@ $channels = [
     "Dajto" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "dajto", "referer" => "https://media.cms.markiza.sk/"],
     "Krimi" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "krimi", "referer" => "https://media.cms.markiza.sk/"],
     "Klasik" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "klasik", "referer" => "https://media.cms.markiza.sk/"],
-    "Markíza TN Live" => ["group" => "SK", "fetcher" => "markiza_fetcher", "id" => "BQeGg0uPHJP_tn", "referer" => "https://media.cms.markiza.sk/"],
 
     "JOJ" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "joj-1080", "referer" => "https://media.joj.sk/"],
     "JOJ Plus" => ["group" => "SK", "fetcher" => "joj_fetcher", "id" => "plus-1080", "referer" => "https://media.joj.sk/"],
