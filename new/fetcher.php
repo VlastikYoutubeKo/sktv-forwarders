@@ -73,8 +73,12 @@ function prima_fetcher($id) {
 }
 
 function nova_fetcher($id) {
-    // Nova require autoplay=1 and matches src
-    $resp = curl_fetch("https://media.cms.nova.cz/embed/" . $id . "live?autoplay=1", "https://media.cms.nova.cz/");
+    if (strpos($id, "_tn") !== false) {
+        $real_id = str_replace("_tn", "", $id);
+        $resp = curl_fetch("https://mediatn.cms.nova.cz/embed/" . $real_id . "?autoplay=1", "https://mediatn.cms.nova.cz/");
+    } else {
+        $resp = curl_fetch("https://media.cms.nova.cz/embed/" . $id . "live?autoplay=1", "https://media.cms.nova.cz/");
+    }
     if (!$resp) return null;
     if (preg_match('/\[{"src":"([^"]+)"/', $resp, $matches)) {
         return str_replace("\\", "", $matches[1]);
@@ -90,7 +94,12 @@ function ct_fetcher($id) {
 }
 
 function markiza_fetcher($id) {
-    $resp = curl_fetch("https://media.cms.markiza.sk/embed/" . $id . "-live?autoplay=any", "https://media.cms.markiza.sk/", true);
+    if (strpos($id, "_tn") !== false) {
+        $real_id = str_replace("_tn", "", $id);
+        $resp = curl_fetch("https://media.cms.markiza.sk/embed/" . $real_id . "?autoplay=any", "https://media.cms.markiza.sk/", true);
+    } else {
+        $resp = curl_fetch("https://media.cms.markiza.sk/embed/" . $id . "-live?autoplay=any", "https://media.cms.markiza.sk/", true);
+    }
     if (!$resp) return null;
     if (preg_match('/\[{"src":"([^"]+)"/', $resp, $matches)) {
         return str_replace("\\", "", $matches[1]);
