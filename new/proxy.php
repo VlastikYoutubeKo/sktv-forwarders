@@ -17,11 +17,6 @@ if (!isset($parsed_url["host"])) {
     header("HTTP/1.1 400 Bad Request");
     die("Invalid URL format");
 }
-$ip = gethostbyname($parsed_url["host"]);
-if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-    header("HTTP/1.1 403 Forbidden");
-    die("SSRF Protection: Cannot proxy to internal networks.");
-}
 
 $isM3u8Url = (stripos(parse_url($url, PHP_URL_PATH), '.m3u8') !== false) || (stripos($url, 'm3u8') !== false);
 
@@ -31,56 +26,76 @@ if (!empty($referer)) {
 }
 $curlHeaders[] = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
+$is_sk = (strpos($url, 'rtvs.sk') !== false || strpos($url, 'markiza.sk') !== false || strpos($url, 'joj.sk') !== false || strpos($url, 'cmesk-ott') !== false);
+$is_cz = (strpos($url, 'iprima.cz') !== false || strpos($url, 'nova.cz') !== false || strpos($url, 'nova-ott') !== false || strpos($url, 'prima-ott') !== false);
+
+if (file_exists(__DIR__ . '/config.php')) {
+    require __DIR__ . '/config.php';
+}
+$cz_proxies = $cz_proxies ?? [];
+$sk_proxies = $sk_proxies ?? [];
+
+$ch = curl_init($url);
+$options = [
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTPHEADER => $curlHeaders,
+    CURLOPT_TIMEOUT => $isM3u8Url ? 15 : 60,
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_SSL_VERIFYHOST => false
+];
+
+if ($is_sk && !empty($sk_proxies)) {
+    $randomProxy = $sk_proxies[array_rand($sk_proxies)];
+    if (substr_count($randomProxy, ':') >= 2) {
+        list($proxyHost, $proxyPort, $proxyUser, $proxyPass) = explode(':', $randomProxy);
+        $options[CURLOPT_PROXY] = $proxyHost . ':' . $proxyPort;
+        $options[CURLOPT_PROXYUSERPWD] = $proxyUser . ':' . $proxyPass;
+    } else {
+        $options[CURLOPT_PROXY] = $randomProxy;
+    }
+} elseif ($is_cz && !empty($cz_proxies)) {
+    $randomProxy = $cz_proxies[array_rand($cz_proxies)];
+    if (substr_count($randomProxy, ':') >= 2) {
+        list($proxyHost, $proxyPort, $proxyUser, $proxyPass) = explode(':', $randomProxy);
+        $options[CURLOPT_PROXY] = $proxyHost . ':' . $proxyPort;
+        $options[CURLOPT_PROXYUSERPWD] = $proxyUser . ':' . $proxyPass;
+    } else {
+        $options[CURLOPT_PROXY] = $randomProxy;
+    }
+}
+
 if (!$isM3u8Url) {
-    // STREAMUJ PŘÍMO bez paměťového bufferu - zamezuje stutteringu (video proxy)
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTPHEADER => $curlHeaders,
-        CURLOPT_TIMEOUT => 60,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_HEADERFUNCTION => function($curl, $header) {
-            // Přepošli bezpečné hlavičky
-            if (stripos($header, 'Transfer-Encoding:') === false && 
-                stripos($header, 'Content-Encoding:') === false && 
-                stripos($header, 'HTTP/') === false) {
-                header($header, false);
-            }
-            return strlen($header);
-        },
-        CURLOPT_WRITEFUNCTION => function($curl, $data) {
-            echo $data;
-            if (ob_get_level() > 0) ob_flush();
-            flush();
-            return strlen($data);
+    // STREAMUJ PŘÍMO bez paměťového bufferu - zamezuje stutteringu
+    $options[CURLOPT_HEADERFUNCTION] = function($curl, $header) {
+        if (stripos($header, 'Transfer-Encoding:') === false && 
+            stripos($header, 'Content-Encoding:') === false && 
+            stripos($header, 'HTTP/') === false) {
+            header($header, false);
         }
-    ]);
+        return strlen($header);
+    };
+    $options[CURLOPT_WRITEFUNCTION] = function($curl, $data) {
+        echo $data;
+        if (ob_get_level() > 0) ob_flush();
+        flush();
+        return strlen($data);
+    };
+    curl_setopt_array($ch, $options);
     curl_exec($ch);
     curl_close($ch);
     exit;
 }
 
-// Nahradíme proxy za externí proxy mxnticek.eu
-$is_sk = (strpos($url, 'rtvs.sk') !== false || strpos($url, 'markiza.sk') !== false || strpos($url, 'joj.sk') !== false);
-$proxy_base = $is_sk ? "https://mxnticek.eu/sktv/proxy_sk.php?q=" : "https://mxnticek.eu/sktv/proxy.php?q=";
-$target_url = $proxy_base . urlencode($url);
-
-// M3U8 Playlist (nested) -> Zpracuj a rewrite URL
-$ch = curl_init($target_url);
-curl_setopt_array($ch, [
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HEADER => true,
-    CURLOPT_HTTPHEADER => $curlHeaders,
-    CURLOPT_TIMEOUT => 15,
-    CURLOPT_SSL_VERIFYPEER => false
-]);
+// Pro M3U8 stáhneme do paměti a nahradíme cesty
+$options[CURLOPT_RETURNTRANSFER] = true;
+$options[CURLOPT_HEADER] = true;
+curl_setopt_array($ch, $options);
 
 $response = curl_exec($ch);
 
 if ($response === false) {
     header("HTTP/1.1 500 Internal Server Error");
-    die("CURL Error");
+    die("CURL Error: " . curl_error($ch));
 }
 
 $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -91,7 +106,7 @@ curl_close($ch);
 
 if ($httpCode != 200) {
     http_response_code($httpCode);
-    die("HTTP Error");
+    die("HTTP Error: " . $httpCode);
 }
 
 header('Content-Type: application/vnd.apple.mpegurl');

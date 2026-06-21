@@ -4,7 +4,7 @@ require_once 'fetcher.php';
 $channels = require 'channels.php';
 
 $chName = $_GET['ch'] ?? '';
-$proxy = isset($_GET['proxy']) ? (int)$_GET['proxy'] : 0; // Default to direct stream (0 bandwidth)
+$proxy = 1; // FORCED proxy stream for geoblocked users
 
 if (!isset($channels[$chName])) {
     header("HTTP/1.1 404 Not Found");

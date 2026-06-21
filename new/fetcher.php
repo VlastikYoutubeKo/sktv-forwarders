@@ -3,9 +3,9 @@
 
 function curl_fetch($url, $referer = "", $proxy_region = null) {
     if ($proxy_region === null) {
-        if (strpos($url, 'iprima.cz') !== false || strpos($url, 'nova.cz') !== false) {
+        if (strpos($url, 'iprima.cz') !== false || strpos($url, 'nova.cz') !== false || strpos($url, 'nova-ott') !== false || strpos($url, 'prima-ott') !== false) {
             $proxy_region = 'CZ';
-        } elseif (strpos($url, 'markiza.sk') !== false) {
+        } elseif (strpos($url, 'markiza.sk') !== false || strpos($url, 'rtvs.sk') !== false || strpos($url, 'joj.sk') !== false || strpos($url, 'cmesk-ott') !== false) {
             $proxy_region = 'SK';
         }
     } else if ($proxy_region === true) {
